@@ -14,8 +14,12 @@ def scrollToBottom():
 
 		newHeight = driver.execute_script('return document.body.scrollHeight')
 		if newHeight == lastHeight:
-			break
-		lastHeight = newHeight
+			if(driver.find_element_by_class_name('stream_fail_container')):
+				driver.find_element_by_class_name('stream_fail_container').find_element_by_xpath('//a[@role="button"]').click()
+			else:
+				break
+		else:
+			lastHeight = newHeight
 
 def returnURL(term):  # term is hasthag to search
 	return 'https://twitter.com/hashtag/{}?src=hash'.format(term)
@@ -32,7 +36,7 @@ def scrapePage(driver, theSearch):
 			username = '@'+username
 			text = tweet.find_element_by_class_name('js-tweet-text').text.encode('ascii','ignore').decode('ascii')
 			theDate = tweet.find_element_by_class_name('time').find_element_by_tag_name('a').text.encode('ascii','ignore').decode('ascii')
-#_by_xpath('//small[@class="time"]')
+
 			footerObject = tweet.find_element_by_class_name('stream-item-footer')
 
 
@@ -60,3 +64,7 @@ driver.quit()
 
 
 
+''' LOAD
+DIV: class="stream-fail-container"
+
+BUTTON: <a role="button" href="#" class="try-again-after-whale">Try again</a>  UNDER p
