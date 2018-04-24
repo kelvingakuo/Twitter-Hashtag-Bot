@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 import requests
 import urllib2
@@ -6,7 +7,14 @@ import time
 import csv
 import sys
 
-def scrollToBottom():
+def elementExists(className, driver):
+	try:
+		driver.find_element_by_class_name(className)
+	except NoSuchElementException:
+		return False
+	return True
+
+def scrollToBottom(driver):
 	lastHeight = driver.execute_script('return document.body.scrollHeight')
 	while True:
 		driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
@@ -14,7 +22,7 @@ def scrollToBottom():
 
 		newHeight = driver.execute_script('return document.body.scrollHeight')
 		if newHeight == lastHeight:
-			if(driver.find_element_by_class_name('stream_fail_container')):
+			if(elementExists('stream_fail_container', driver)):
 				driver.find_element_by_class_name('stream_fail_container').find_element_by_xpath('//a[@role="button"]').click()
 			else:
 				break
@@ -31,6 +39,7 @@ def scrapePage(driver, theSearch):
 
 	with open(theSearch+'.csv','a') as dump:
 		writer = csv.writer(dump)
+		writer.writerow(['Username', 'Tweet', 'Date', 'Retweets', 'Likes', 'Replies'])
 		for tweet in tweets:
 			username = tweet.find_element_by_class_name('username').find_element_by_tag_name('b').text.encode('ascii','ignore').decode('ascii')
 			username = '@'+username
@@ -50,7 +59,7 @@ def scrapePage(driver, theSearch):
 
 
 
-path = 'path/to/Selenium/webdriver.exe'
+path = 'path/to/selenium/webdriver.exe'
 driver = webdriver.Chrome(path)
 
 
@@ -58,13 +67,7 @@ searchTerm = sys.argv[1]
 url = returnURL(searchTerm)
 driver.get(url)
 driver.maximize_window()
-scrollToBottom()
+scrollToBottom(driver)
 scrapePage(driver, searchTerm)
 driver.quit()
 
-
-
-''' LOAD
-DIV: class="stream-fail-container"
-
-BUTTON: <a role="button" href="#" class="try-again-after-whale">Try again</a>  UNDER p
