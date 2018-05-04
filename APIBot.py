@@ -21,7 +21,7 @@ def collectTweets(searchTerm, filename, api, maxId=None, obj={}):
 
 	with open(filename, 'a') as dump:
 		try:
-			for tweet in api.search(q=theTerm, lang='en', result_type='mixed', count=100, tweet_mode='extended', max_id=maxId)['statuses']:
+			for tweet in api.search(q=theTerm, lang='en', result_type='recent', count=100, tweet_mode='extended', max_id=maxId)['statuses']:
 				ids.append(tweet['id'])
 				tweetObjects['TweetData'].append(tweet)
 			
