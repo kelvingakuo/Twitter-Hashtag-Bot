@@ -38,10 +38,10 @@ def collectTweets(searchTerm, filename, api, maxId=None, obj={}):
 
 
 
-consumer_key = '3tjpAl2B4uADbUdMQpaKcD6wB'
-consumer_secret = 'vYXy8kJud07mScO7mDIEi3TyzQ6bFK48XbIUbuf4lftJkt1kB8'
-access_token = '769581680-v9OUTVP5GAUm6C8DgxMidd3fa33FrZWvMPWpTpy3'
-access_token_secret = 'LQYK9bxMk3VU4Lbdz6N1WeBMwpGY3TW0XWUn9Lpay8GYo'
+consumer_key = ''
+consumer_secret = ''
+access_token = ''
+access_token_secret = ''
 
 
 api = Twython(consumer_key, consumer_secret, access_token, access_token_secret)
